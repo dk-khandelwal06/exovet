@@ -41,10 +41,23 @@ app.add_middleware(
 _candidates_df = None
 
 
+def _resolve_data_path():
+    candidate_paths = [
+        os.path.join(BASE_DIR, "data", "raw", "kepler_cumulative.csv"),
+        os.path.join(os.getcwd(), "data", "raw", "kepler_cumulative.csv"),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "raw", "kepler_cumulative.csv"),
+        "/var/task/data/raw/kepler_cumulative.csv"
+    ]
+    for p in candidate_paths:
+        if os.path.exists(p):
+            return p
+    return candidate_paths[0]
+
+
 def load_candidates():
     global _candidates_df
     if _candidates_df is None:
-        csv_path = os.path.join(BASE_DIR, "data", "raw", "kepler_cumulative.csv")
+        csv_path = _resolve_data_path()
         if os.path.exists(csv_path):
             cols = [
                 'kepid', 'kepoi_name', 'kepler_name', 'koi_disposition',
@@ -81,7 +94,20 @@ class PredictionRequest(BaseModel):
     threshold: Optional[float] = Field(0.50, ge=0.05, le=0.95)
 
 
+@app.get("/")
+@app.get("/api")
+def root():
+    """Root endpoint verifying ExoVet backend status."""
+    return {
+        "name": "ExoVet API",
+        "description": "NASA Kepler Exoplanet Vetting Engine",
+        "status": "operational",
+        "version": "1.0.0"
+    }
+
+
 @app.get("/api/health")
+@app.get("/health")
 def health_check():
     """System health check and runtime status."""
     try:
@@ -103,6 +129,7 @@ def health_check():
 
 
 @app.get("/api/metrics")
+@app.get("/metrics")
 def get_metrics():
     """Retrieve test performance metrics for all compared models."""
     try:
@@ -117,6 +144,7 @@ def get_metrics():
 
 
 @app.get("/api/candidates")
+@app.get("/candidates")
 def list_candidates(
     page: int = 1,
     limit: int = 20,
@@ -170,6 +198,7 @@ def list_candidates(
 
 
 @app.get("/api/candidates/{koi_id}")
+@app.get("/candidates/{koi_id}")
 def get_candidate_details(koi_id: str):
     """Retrieve full photometric details of a specific candidate by KOI name or KEPID."""
     df = load_candidates()
@@ -192,6 +221,7 @@ def get_candidate_details(koi_id: str):
 
 
 @app.post("/api/predict")
+@app.post("/predict")
 def predict_exoplanet(request: PredictionRequest):
     """
     Run machine learning vetting prediction.
@@ -226,6 +256,7 @@ def predict_exoplanet(request: PredictionRequest):
 
 
 @app.get("/api/model-comparison")
+@app.get("/model-comparison")
 def get_model_comparison():
     """Retrieve cross-validation benchmarks and ROC/PR curve points for all models."""
     try:
@@ -239,6 +270,7 @@ def get_model_comparison():
 
 
 @app.get("/api/feature-importance")
+@app.get("/feature-importance")
 def get_feature_importance():
     """Retrieve held-out permutation feature importances."""
     try:
@@ -253,6 +285,7 @@ def get_feature_importance():
 
 
 @app.get("/api/error-analysis")
+@app.get("/error-analysis")
 def get_error_analysis():
     """Retrieve misclassified false positives and false negatives with astrophysical insights."""
     try:

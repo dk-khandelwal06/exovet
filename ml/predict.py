@@ -11,9 +11,27 @@ import pandas as pd
 from typing import Dict, Any, Optional
 
 from ml.data import BASE_FEATURES
+from ml.features import AstronomicalFeatureEngineer
 
-MODEL_PATH = "ml/artifacts/best_model.joblib"
-METADATA_PATH = "ml/artifacts/metadata.json"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _resolve_path(rel_path: str) -> str:
+    """Find file in BASE_DIR, current working directory, or relative paths."""
+    candidates = [
+        os.path.join(BASE_DIR, rel_path),
+        os.path.join(os.getcwd(), rel_path),
+        os.path.abspath(rel_path),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", rel_path),
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    return os.path.join(BASE_DIR, rel_path)
+
+
+MODEL_PATH = _resolve_path("ml/artifacts/best_model.joblib")
+METADATA_PATH = _resolve_path("ml/artifacts/metadata.json")
 
 _cached_model = None
 _cached_metadata = None
@@ -23,9 +41,10 @@ def get_model():
     """Load and cache the trained model pipeline."""
     global _cached_model
     if _cached_model is None:
-        if not os.path.exists(MODEL_PATH):
-            raise FileNotFoundError(f"Trained model not found at {MODEL_PATH}. Train the model first.")
-        _cached_model = joblib.load(MODEL_PATH)
+        model_file = _resolve_path("ml/artifacts/best_model.joblib")
+        if not os.path.exists(model_file):
+            raise FileNotFoundError(f"Trained model not found at {model_file}. Train the model first.")
+        _cached_model = joblib.load(model_file)
     return _cached_model
 
 
@@ -33,9 +52,10 @@ def get_metadata():
     """Load and cache metadata and evaluation results."""
     global _cached_metadata
     if _cached_metadata is None:
-        if not os.path.exists(METADATA_PATH):
-            raise FileNotFoundError(f"Metadata not found at {METADATA_PATH}.")
-        with open(METADATA_PATH, "r") as f:
+        meta_file = _resolve_path("ml/artifacts/metadata.json")
+        if not os.path.exists(meta_file):
+            raise FileNotFoundError(f"Metadata not found at {meta_file}.")
+        with open(meta_file, "r") as f:
             _cached_metadata = json.load(f)
     return _cached_metadata
 

@@ -2,14 +2,24 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: process.env.API_URL 
-          ? `${process.env.API_URL}/api/:path*` 
-          : 'http://127.0.0.1:8000/api/:path*',
-      },
-    ];
+    if (process.env.API_URL) {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${process.env.API_URL}/api/:path*`,
+        },
+      ];
+    }
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://127.0.0.1:8000/api/:path*',
+        },
+      ];
+    }
+    // On Vercel production, vercel.json handles routing /api/* to the serverless function
+    return [];
   },
   images: {
     unoptimized: true,
@@ -21,4 +31,3 @@ const nextConfig = {
 };
 
 export default nextConfig;
-
