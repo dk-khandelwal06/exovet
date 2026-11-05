@@ -66,3 +66,4 @@ def test_error_analysis_endpoint():
     res = get_error_analysis()
     assert "summary" in res
     assert "sample_false_positives" in res
+

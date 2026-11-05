@@ -189,3 +189,4 @@ git push -u origin main
 - **Shallue & Vanderburg (2018)**: *Identifying Exoplanets with Deep Learning in Kepler Data*, The Astronomical Journal, 155:94.
 
 *Disclaimer: ExoVet predictions represent statistical machine-learning estimates based on photometric catalog measurements. They do not constitute formal astronomical validation or discovery confirmation.*
+

@@ -650,3 +650,4 @@ export default function DetectorPage() {
     </Suspense>
   );
 }
+

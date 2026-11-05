@@ -71,3 +71,4 @@ def test_predict_false_positive_stellar_binary():
     assert pred["predicted_disposition"] == "FALSE POSITIVE"
     assert pred["confirmed_probability"] < 0.15
     assert "Likely False Positive" in pred["status"]
+

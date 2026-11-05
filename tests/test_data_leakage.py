@@ -43,3 +43,4 @@ def test_prepare_datasets_separation():
     assert set(labeled_df['koi_disposition'].unique()) == {"CONFIRMED", "FALSE POSITIVE"}
     assert (candidate_df['koi_disposition'] == "CANDIDATE").all()
     assert set(labeled_df['target'].unique()) == {0, 1}
+

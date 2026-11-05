@@ -81,3 +81,4 @@ class AstronomicalFeatureEngineer(BaseEstimator, TransformerMixin):
 
     def get_feature_names_out(self, input_features=None):
         return np.array(FEATURE_NAMES)
+
