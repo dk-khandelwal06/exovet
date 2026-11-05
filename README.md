@@ -1,8 +1,10 @@
 <div align="center">
 
+<img src="assets/logo.png" alt="ParaliWatch logo" width="120" />
+
 <br/>
 
-<h1>E X O V E T</h1>
+<h1>ExoVet</h1>
 
 <h3>Teaching a model to tell real planets from impostors in NASA's Kepler data.</h3>
 
@@ -35,6 +37,7 @@ using NASA's Kepler Objects of Interest catalog, with explainable, threshold-adj
 <p>
   <a href="https://exovet.vercel.app/"><img src="https://img.shields.io/badge/%E2%96%B6_LIVE_DEMO-exovet.vercel.app-00E5FF?style=for-the-badge&labelColor=0B1020" alt="Live Demo"/></a>
   <a href="https://github.com/dk-khandelwal06/exovet"><img src="https://img.shields.io/badge/GITHUB-dk--khandelwal06%2Fexovet-F5B83D?style=for-the-badge&logo=github&labelColor=0B1020" alt="GitHub Repository"/></a>
+  <a href=""><img src="https://img.shields.io/badge/%E2%96%B6_DEMO_VIDEO-ExoVet-00E5FF?style=for-the-badge&labelColor=0B1020" alt="Demo Video"/></a>
 </p>
 
 <br/>
